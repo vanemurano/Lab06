@@ -39,7 +39,33 @@ class Controller:
         self._view.update_page()
 
     def handleAnalisiVendite(self, e):
-        pass
+        self._view.txt_result.clean()
+        if self._view.dd_anno.value is None or self._view.dd_brand.value is None or self._view.dd_retailer.value is None:
+            self._view.create_alert("Attenzione! Selezionare filtri")
+            return
+        vendite = self._model.getFilteredSales(self._view.dd_anno.value, self._view.dd_brand.value,
+                                               self._view.dd_retailer.value)
+        affari=0
+        retailers=set() #creo un set, in modo da non avere elementi duplicati
+        prodotti=set()
+        if len(vendite)==0:
+            self._view.txt_result.controls.append(
+                ft.Text("Non ci sono vendite che corrispondono ai filtri selezionati",
+                        color="blue")
+            )
+            self._view.update_page()
+            return
+        for v in vendite:
+            affari+=v.ricavo
+            retailers.add(v.retailer_code)
+            prodotti.add(v.product_number)
+        self._view.txt_result.controls.extend( #aggiunge più di un elemento contemporaneamente alla lista
+            [ft.Text("Statistiche vendite:"),
+             ft.Text(f"Giro d'affari: {affari}"),
+             ft.Text(f"Numero vendite: {len(vendite)}"),
+             ft.Text(f"Numero retailers coinvolti: {len(retailers)}"),
+             ft.Text(f"Numero prodotti coinvolti: {len(prodotti)}")])
+        self._view.update_page()
 
     def fillddAnno(self):
         for anno in self._model.getAllYears():
