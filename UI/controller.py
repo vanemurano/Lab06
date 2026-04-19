@@ -11,9 +11,10 @@ class Controller:
 
     def handleTopVendite(self, e):
         self._view.txt_result.clean()
-        vendite=self._model.getFilteredSales(self._view.dd_anno.value, self._view.dd_brand.value, self._view.dd_retailer.value)
         if self._view.dd_anno.value is None or self._view.dd_brand.value is None or self._view.dd_retailer.value is None:
-            self._view.create_alert("Attenzione! Inserire tutti i filtri")
+            self._view.create_alert("Attenzione! Selezionare filtri")
+            return
+        vendite=self._model.getFilteredSales(self._view.dd_anno.value, self._view.dd_brand.value, self._view.dd_retailer.value)
         stop=min(len(vendite), 5)
         if stop==0:
             self._view.txt_result.controls.append(
@@ -22,8 +23,13 @@ class Controller:
             )
             self._view.update_page()
             return
-        self._view.txt_result.controls.append(
-            ft.Text(f"Ecco le prime {stop} vendite che corrispondono ai filtri selezionati, in ordine di ricavo:"))
+        if self._view.dd_anno.value=="Nessun filtro" and self._view.dd_brand.value==self._view.dd_retailer.value and self._view.dd_anno.value==self._view.dd_brand.value:
+            #cioè se selezioniamo sempre Nessun filtro:
+            self._view.txt_result.controls.append(
+                ft.Text(f"Ecco le prime 5 vendite del database, in ordine di ricavo:"))
+        else:
+            self._view.txt_result.controls.append(
+                ft.Text(f"Ecco le prime {stop} vendite che corrispondono ai filtri selezionati, in ordine di ricavo:"))
         i=0
         while i<stop:
             self._view.txt_result.controls.append(

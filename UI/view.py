@@ -26,9 +26,12 @@ class View(ft.UserControl):
 
         #ROW with some controls
         #PRIMO DROPDOWN
-        self.dd_anno=ft.Dropdown(label="anno", width=300)
-        self.dd_brand=ft.Dropdown(label="brand", width=300)
-        self.dd_retailer=ft.Dropdown(label="retailer", expand=True) #prende tutto lo spazio rimasto sulla riga
+        self.dd_anno=ft.Dropdown(label="anno", width=300,
+                                 options=[ft.dropdown.Option("Nessun filtro")])
+        self.dd_brand=ft.Dropdown(label="brand", width=300,
+                                  options=[ft.dropdown.Option("Nessun filtro")])
+        self.dd_retailer=ft.Dropdown(label="retailer", expand=True, #prende tutto lo spazio rimasto sulla riga
+                                     options=[ft.dropdown.Option("Nessun filtro")])
 
         row1=ft.Row([self.dd_anno, self.dd_brand, self.dd_retailer])
 

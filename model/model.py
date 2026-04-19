@@ -14,4 +14,11 @@ class Model:
         return DAO.getAllRetailers()
 
     def getFilteredSales(self, anno, brand, codice):
+        if anno=="Nessun filtro":
+            anno=None
+        if brand=="Nessun filtro":
+            brand=None
+        if codice=="Nessun filtro":
+            codice=None
+        #passa None se non c'è filtro in modo da nno crashare la query sql dopo
         return DAO.getFilteredSales(anno, brand, codice)
